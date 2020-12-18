@@ -1,15 +1,14 @@
 import QtQuick 2.0
 
-Rectangle{
+Rectangle {
+    id: gameScene
     color: "black"
     width: parent.width
     height: parent.height
 
-    id: gameScene
-
-    focus: true
-
     property var fps: 20
+
+    // Пунктир по середине
 
     Column{
         anchors.centerIn: parent
@@ -23,10 +22,11 @@ Rectangle{
         }
     }
 
+    // Очки игроков
+
     Row{
         anchors.margins: 100
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
         spacing: 200
         Text {
             id: leftPoints
@@ -41,6 +41,8 @@ Rectangle{
             font.pointSize: 32
         }
     }
+
+    // Игроки
 
     Player{
         id: left
@@ -57,9 +59,21 @@ Rectangle{
         keyDown: Qt.Key_S
     }
 
+    // Мяч
+
     Ball{
         id: ball
     }
+
+    function startTimer(){
+        timer.running = true
+    }
+
+    function stopTimer(){
+        timer.running = false
+    }
+
+    // Управление доской
 
     function movePlayer(a, event){
         if(event.key == a.keyUp) a.goUp()
@@ -69,7 +83,10 @@ Rectangle{
     Keys.onPressed: {movePlayer(left, event); movePlayer(right, event)}
 
     Timer {
-        interval: 1000 / fps; running: true; repeat: true
+        id: timer
+        interval: 1000 / fps; running: false; repeat: true
+
+        // Столкновение со стенами
 
         function checkWallCollision(){
             if(ball.x > ball.parentWidth - 20 ||
@@ -91,6 +108,8 @@ Rectangle{
                 ball.ySpeed *= -1
         }
 
+        // Столковение с игроками
+
         function checkPlayersCollision(){
             if(ball.x <= left.x + left.width &&
                     ball.x + ball.width >= left.x &&
@@ -104,6 +123,8 @@ Rectangle{
                         ball.y + ball.height >= right.y)
                     ball.xSpeed *= -1
         }
+
+        // Тело таймера
 
         onTriggered: {
 

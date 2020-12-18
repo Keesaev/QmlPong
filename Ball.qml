@@ -9,6 +9,8 @@ Rectangle{
     x: parent.width / 2
     y: parent.height / 2
 
+    // Вектор скорости / направления
+
     property var xSpeed: 15
     property var ySpeed: 15
 
