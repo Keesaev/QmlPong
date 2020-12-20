@@ -15,12 +15,12 @@ void Client::stopClient(){
     disconnect(m_socket, nullptr, nullptr, nullptr);
 }
 
-bool Client::startClient(){
-    //stopClient();
+bool Client::startClient(QString address){
+    stopClient();
 
-    m_socket->connectToHost("127.0.0.1", 80000);
+    m_socket->connectToHost(address, 80000);
 
-    if(!m_socket->waitForConnected(1000)){
+    if(!m_socket->waitForConnected(3000)){
         qDebug() << "Could not connect to host\n";
         stopClient();
         return false;
@@ -36,5 +36,5 @@ void Client::onStateChanged(){
         emit disconnected();
         stopClient();
     }
-    qDebug() << m_socket->state() << "\n";
+    qDebug() << "Client Status" << m_socket->state();
 }

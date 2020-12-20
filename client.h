@@ -12,7 +12,7 @@ public:
     explicit Client(QObject *parent = nullptr);
     QTcpSocket *m_socket = nullptr;
 
-    bool startClient();
+    bool startClient(QString address);
 
 public slots:
     void onStateChanged();

@@ -9,11 +9,17 @@ Window {
     width: 800
     height: 650
 
+    signal sendData(string data)
+    property var ready: false
+    property var otherReady: false
+
     RowLayout{
         Button{
             font.pointSize: 16
-            text: "Начать игру"
-
+            text: "Готов"
+            onClicked: {
+                ready = true
+            }
         }
         Button{
             text: "Выйти"
@@ -29,11 +35,31 @@ Window {
         gameScene.stopTimer()
     }
 
+    function setHostPlayer(){
+        gameScene.setHostPlayer()
+    }
+
+    function setClientPlayer(){
+        gameScene.setClientPlayer()
+    }
+
+    function dataReceived(type, a, b, c){
+        gameScene.dataReceived(type, a, b, c)
+    }
+
+    function setInit(){
+        gameScene.setInit()
+    }
+
     GameScene{
         id: gameScene
         anchors.bottom: parent.bottom
 
         width: 800
         height: 600
+
+        onDataGenerated: {
+            sendData(data)
+        }
     }
 }

@@ -6,6 +6,7 @@
 
 #include "server.h"
 #include "client.h"
+#include "streaming.h"
 
 class Controller : public QObject
 {
@@ -14,16 +15,22 @@ class Controller : public QObject
 public:
     explicit Controller(QObject *parent = nullptr);
 
-    Server *m_server;
-    Client *m_client;
+    Server *m_server = nullptr;
+    Client *m_client = nullptr;
+    Streaming *m_streaming = nullptr;
 
     Q_INVOKABLE void startServer();
-    Q_INVOKABLE bool startClient();
+    Q_INVOKABLE bool startClient(QString address);
+    Q_INVOKABLE void startServerStreaming(QString address);
+    Q_INVOKABLE void startClientStreaming(QString address);
 public slots:
+    void stopStreaming();
     void cancelConnection();
+    void onSendData(QString data);
 signals:
-    void connected();
+    void connected(QString clientAddress);
     void disconnected();
+    void dataReceived(QString type, int a, int b, int c);
 };
 
 #endif // CONTROLLER_H

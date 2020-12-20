@@ -24,7 +24,7 @@ public slots:
     void stopServer();
 signals:
     void disconnected();
-    void connected();
+    void connected(QString clientAddress);
 };
 
 #endif // SERVER_H

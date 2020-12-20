@@ -10,7 +10,8 @@ SOURCES += \
         client.cpp \
         controller.cpp \
         main.cpp \
-        server.cpp
+        server.cpp \
+        streaming.cpp
 
 RESOURCES += qml.qrc
 
@@ -28,6 +29,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     client.h \
     controller.h \
-    server.h
+    server.h \
+    streaming.h
 
 DISTFILES +=

@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
-    qmlRegisterType<Controller>("Controller", 1, 0, "Controller");
+    qmlRegisterType<Controller>("Controller", 1, 1, "Controller");
     engine.load(url);
 
     return app.exec();
