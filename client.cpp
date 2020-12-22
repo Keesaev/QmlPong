@@ -18,7 +18,7 @@ void Client::stopClient(){
 bool Client::startClient(QString address){
     stopClient();
 
-    m_socket->connectToHost(address, 80000);
+    m_socket->connectToHost(address, 4000);
 
     if(!m_socket->waitForConnected(3000)){
         qDebug() << "Could not connect to host\n";

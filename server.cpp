@@ -20,7 +20,7 @@ void Server::stopServer(){
 void Server::startServer(){
     stopServer();
 
-    m_server->listen(QHostAddress::Any, 80000);
+    m_server->listen(QHostAddress::Any, 4000);
 
     connect(m_server, &QTcpServer::newConnection, this, &Server::onNewConnection);
 }

@@ -13,8 +13,8 @@ public:
     explicit Streaming(QObject *parent = nullptr);
     QUdpSocket *m_socket = nullptr;
     QHostAddress m_address;
-    int m_recvPort = 80001;
-    int m_sendPort = 80002;
+    int m_recvPort = 4001;
+    int m_sendPort = 4002;
     void setReceiverPort(int port){ m_recvPort = port; }
     void setSenderPort(int port){ m_sendPort = port; }
     void setAddress(QString address) { m_address = QHostAddress(address); }

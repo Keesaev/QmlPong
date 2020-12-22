@@ -4,8 +4,8 @@ Streaming::Streaming(QObject *parent) : QObject(parent)
 {
     m_socket = new QUdpSocket();
     m_address.setAddress("127.0.0.1");
-    m_recvPort = 80001;
-    m_sendPort = 80002;
+    m_recvPort = 4001;
+    m_sendPort = 4002;
 }
 
 void Streaming::slotStart(){

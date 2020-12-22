@@ -31,15 +31,15 @@ void Controller::stopStreaming(){
 }
 
 void Controller::startServerStreaming(QString address){
-    m_streaming->setReceiverPort(80001); //80001
-    m_streaming->setSenderPort(80002);
+    m_streaming->setReceiverPort(4001);
+    m_streaming->setSenderPort(4002);
     m_streaming->setAddress(address);
     m_streaming->slotStart();
 }
 
 void Controller::startClientStreaming(QString address){
-    m_streaming->setReceiverPort(80002);
-    m_streaming->setSenderPort(80001); // 80001
+    m_streaming->setReceiverPort(4002);
+    m_streaming->setSenderPort(4001);
     m_streaming->setAddress(address);
     m_streaming->slotStart();
 }
