@@ -20,7 +20,7 @@ public:
     Streaming *m_streaming = nullptr;
 
     Q_INVOKABLE void startServer();
-    Q_INVOKABLE bool startClient(QString address);
+    Q_INVOKABLE void startClient(QString address);
     Q_INVOKABLE void startServerStreaming(QString address);
     Q_INVOKABLE void startClientStreaming(QString address);
 public slots:
@@ -31,6 +31,7 @@ signals:
     void connected(QString clientAddress);
     void disconnected();
     void dataReceived(QString type, int a, int b, int c);
+    void clientConnected();
 };
 
 #endif // CONTROLLER_H

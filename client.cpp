@@ -9,26 +9,20 @@ Client::Client(QObject *parent) : QObject(parent)
 
 void Client::stopClient(){
     if(m_socket != nullptr){
+        m_socket->abort();
         m_socket->close();
         m_socket->disconnectFromHost();
     }
     disconnect(m_socket, nullptr, nullptr, nullptr);
 }
 
-bool Client::startClient(QString address){
+void Client::startClient(QString address){
     stopClient();
 
     m_socket->connectToHost(address, 4000);
 
-    if(!m_socket->waitForConnected(3000)){
-        qDebug() << "Could not connect to host\n";
-        stopClient();
-        return false;
-    }
-    else{
-        connect(m_socket, &QAbstractSocket::stateChanged, this, &Client::onStateChanged);
-        return true;
-    }
+    connect(m_socket, SIGNAL(connected()),
+            this, SIGNAL(connected()));
 }
 
 void Client::onStateChanged(){

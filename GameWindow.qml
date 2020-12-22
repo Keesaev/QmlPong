@@ -4,28 +4,14 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 Window {
-    title: "Понг"
+    title: "Pong"
 
     width: 800
-    height: 650
+    height: 600
+
+    color: "black"
 
     signal sendData(string data)
-    property var ready: false
-    property var otherReady: false
-
-    RowLayout{
-        Button{
-            font.pointSize: 16
-            text: "Готов"
-            onClicked: {
-                ready = true
-            }
-        }
-        Button{
-            text: "Выйти"
-            font.pointSize: 16
-        }
-    }
 
     function startTimer(){
         gameScene.startTimer()

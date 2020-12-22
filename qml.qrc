@@ -6,6 +6,5 @@
         <file>Player.qml</file>
         <file>GameWindow.qml</file>
         <file>ConnectionWindow.qml</file>
-        <file>WaitForConnection.qml</file>
     </qresource>
 </RCC>

@@ -6,6 +6,18 @@ Rectangle {
     width: parent.width
     height: parent.height
 
+    property var otherBallx: ball.x
+    property var otherBally: ball.y
+    property var otherPlayerY: notActivePlayer.y
+    property var fps: 15
+    property var activePlayer: left
+    property var notActivePlayer: right
+
+    FontLoader{
+        id: pressStart2p;
+        source: "qrc:/PressStart2P-Regular.ttf"
+    }
+
     signal dataGenerated(string data)
 
     function dataReceived(type, a, b, c){
@@ -39,13 +51,6 @@ Rectangle {
         left.x = 40
     }
 
-    property var otherBallx: ball.x
-    property var otherBally: ball.y
-    property var otherPlayerY: notActivePlayer.y
-    property var fps: 15
-    property var activePlayer: left
-    property var notActivePlayer: right
-
     // Пунктир по середине
 
     Column{
@@ -69,14 +74,16 @@ Rectangle {
         Text {
             id: leftPoints
             text: left.points.toLocaleString()
+            font.pixelSize: 32
+            font.family: pressStart2p.name
             color: "white"
-            font.pointSize: 32
         }
         Text {
             id: rightPoints
             text: right.points.toLocaleString()
+            font.pixelSize: 32
+            font.family: pressStart2p.name
             color: "white"
-            font.pointSize: 32
         }
     }
 

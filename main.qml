@@ -6,12 +6,18 @@ import QtQuick.Controls.Styles 1.4
 import Controller 1.1
 
 Window{
-    title: "Игра по сети"
+    title: "Pong"
     id: mainWindow
     visible: true
 
     width: 400
     height: 200
+    color: "black"
+
+    FontLoader{
+        id: pressStart2p;
+        source: "qrc:/PressStart2P-Regular.ttf"
+    }
 
     ColumnLayout{
 
@@ -23,11 +29,26 @@ Window{
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            text: "Создать игру"
-            font.pointSize: 14
+            contentItem: Text{
+                text: "Создать игру";
+                font.family: pressStart2p.name
+                font.pointSize: 12
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "white"
+            }
+
+            background: Rectangle{
+                color: "black"
+                opacity: enabled ? 1 : 0.3
+                border.color: "white"
+                border.width: 1
+                radius: 2
+            }
 
             onClicked: {
-                waitForConnectionWindow.show()
+                connectionWindow.setMessage("Ожидание игрока")
+                connectionWindow.show()
                 controller.startServer()
             }
         }
@@ -36,24 +57,37 @@ Window{
 
             Button{
                 Layout.fillHeight: true
-                text: "Подключиться по адресу:"
-                font.pointSize: 14
+
+                contentItem: Text{
+                    text: "Подключиться"
+                    font.pointSize: 12
+                    font.family: pressStart2p.name
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color: "white"
+                }
+
+                background: Rectangle{
+                    color: "black"
+                    opacity: enabled ? 1 : 0.3
+                    border.color: "white"
+                    border.width: 1
+                    radius: 2
+                }
 
                 onClicked: {
+                    connectionWindow.setMessage("Подключение")
                     connectionWindow.show()
-                    if(controller.startClient(address.text)){
-                        startGame()
-                        gameWindow.setClientPlayer()
-                        controller.startClientStreaming(address.text)
-                    }
-                    connectionWindow.visible = false
+                    controller.startClient(address.text)
                 }
             }
             TextEdit{
                 id: address
                 Layout.fillHeight: true
                 text: "127.0.0.1"
-                font.pointSize: 14
+                font.family: pressStart2p.name
+                color: "white"
+                font.pointSize: 12
             }
         }
     }
@@ -61,7 +95,7 @@ Window{
     function startGame(){
         gameWindow.setInit()
         mainWindow.visible = false
-        waitForConnectionWindow.hide()
+        connectionWindow.hide()
         gameWindow.show()
         gameWindow.startTimer()
     }
@@ -75,6 +109,7 @@ Window{
             mainWindow.visible = true
             controller.cancelConnection()
             stopTimer()
+            mainWindow.update()
         }
         onSendData: {
             controller.onSendData(data)
@@ -84,6 +119,11 @@ Window{
     // Окно подключения к серверу
     ConnectionWindow{
         id: connectionWindow
+
+        // @disable-check M16
+        onClosing:{
+            controller.cancelConnection()
+        }
     }
 
     // Контроллер
@@ -105,15 +145,10 @@ Window{
             console.log("TYPE: " + type)
             gameWindow.dataReceived(type, a, b, c)
         }
-    }
-
-    // Окно ожидания подключений
-    WaitForConnection{
-        id: waitForConnectionWindow
-
-        // @disable-check M16
-        onClosing:{
-            controller.cancelConnection()
+        onClientConnected: {
+            gameWindow.setClientPlayer()
+            controller.startClientStreaming(address.text)
+            startGame()
         }
     }
 }

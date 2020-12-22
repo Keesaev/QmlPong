@@ -14,6 +14,8 @@ Controller::Controller(QObject *parent) : QObject(parent)
             this, &Controller::disconnected);
     connect(m_streaming, SIGNAL(dataReceived(QString, int, int, int)),
             this, SIGNAL(dataReceived(QString, int, int, int)));
+    connect(m_client, SIGNAL(connected()),
+            this, SIGNAL(clientConnected()));
 }
 
 void Controller::onSendData(QString data){
@@ -49,10 +51,6 @@ void Controller::startServer(){
     // Повторяем сигналы, чтобы отловить их в main.qml
 }
 
-bool Controller::startClient(QString address){
-    if(m_client->startClient(address)){
-        return true;
-    }
-    else
-        return false;
+void Controller::startClient(QString address){
+    m_client->startClient(address);
 }
