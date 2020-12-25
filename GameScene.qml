@@ -12,6 +12,7 @@ Rectangle {
     property var fps: 15
     property var activePlayer: left
     property var notActivePlayer: right
+    property var pointsToWin: 3
 
     FontLoader{
         id: pressStart2p;
@@ -19,6 +20,7 @@ Rectangle {
     }
 
     signal dataGenerated(string data)
+    signal gameOver()
 
     function dataReceived(type, a, b, c){
 
@@ -31,6 +33,8 @@ Rectangle {
         else if(type === "b"){
             left.points = a
             right.points = b
+
+            checkPoints()
 
             ball.x = ball.parentWidth / 10;
             ball.y = ball.parentHeight / 10;
@@ -84,6 +88,35 @@ Rectangle {
             font.pixelSize: 32
             font.family: pressStart2p.name
             color: "white"
+        }
+    }
+
+    function checkPoints(){
+        var msg = left.points + " : " + right.points;
+        if(activePlayer.points >= pointsToWin)
+        {
+            msg = "Вы выиграли со счетом\n" + msg;
+            messageWindow.setMessage(msg)
+            messageWindow.show()
+            messageWindow.setVisible(true)
+            timer.stop()
+        }
+        else if(notActivePlayer.points >= pointsToWin){
+            msg = "Вы проиграли со счетом\n" + msg;
+            messageWindow.setMessage(msg)
+            messageWindow.show()
+            messageWindow.setVisible(true)
+            timer.stop()
+        }
+    }
+
+    ConnectionWindow{
+        id: messageWindow
+
+        buttonText: "Выход"
+        // @disable-check M16
+        onClosing:{
+            gameOver()
         }
     }
 
@@ -163,14 +196,6 @@ Rectangle {
         }
     }
 
-    function hostBehavior(){
-
-    }
-
-    function clientBehavior(){
-
-    }
-
     // Столкновение со стенами
     function checkWallCollision(){
         if(ball.x > ball.parentWidth - 20 ||
@@ -179,11 +204,13 @@ Rectangle {
                 left.points++
                 dataGenerated("b;" + left.points + ";" +
                               right.points + ";")
+                checkPoints()
             }
             else if(ball.x < 0){
                 right.points++
                 dataGenerated("b;" + left.points + ";" +
                               right.points + ";")
+                checkPoints()
             }
             ball.x = ball.parentWidth / 10;
             ball.y = ball.parentHeight / 10;

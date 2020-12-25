@@ -87,7 +87,7 @@ Window{
                 text: "127.0.0.1"
                 font.family: pressStart2p.name
                 color: "white"
-                font.pointSize: 12
+                font.pointSize: 10
             }
         }
     }

@@ -11,10 +11,15 @@ Window {
     color: "black"
 
     property var message: "Подключение"
+    property var buttonText: "Отмена"
 
     function setMessage(msg){
         message = msg
         update()
+    }
+
+    function setButtonText(txt){
+        buttonText = txt
     }
 
     FontLoader{
@@ -33,7 +38,7 @@ Window {
         }
         Button {
             contentItem: Text{
-                text: "Отмена"
+                text: buttonText
                 font.family: pressStart2p.name
                 font.pointSize: 12
                 horizontalAlignment: Text.AlignHCenter

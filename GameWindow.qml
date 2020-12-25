@@ -47,5 +47,9 @@ Window {
         onDataGenerated: {
             sendData(data)
         }
+
+        onGameOver: {
+            close()
+        }
     }
 }
