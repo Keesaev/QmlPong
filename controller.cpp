@@ -18,12 +18,19 @@ Controller::Controller(QObject *parent) : QObject(parent)
             this, SIGNAL(clientConnected()));
 }
 
+bool Controller::isValidIp(QString address){
+    QRegExp mask = QRegExp("(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})");
+    if(mask.exactMatch(address))
+        return true;
+    else
+        return false;
+}
+
 void Controller::onSendData(QString data){
     m_streaming->sendData(data);
 }
 
 void Controller::cancelConnection(){
-    qDebug() << "cancelConnection";
     m_server->stopServer();
     m_client->stopClient();
 }
@@ -48,9 +55,9 @@ void Controller::startClientStreaming(QString address){
 
 void Controller::startServer(){
     m_server->startServer();
-    // Повторяем сигналы, чтобы отловить их в main.qml
 }
 
 void Controller::startClient(QString address){
+
     m_client->startClient(address);
 }

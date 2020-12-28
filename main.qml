@@ -76,9 +76,15 @@ Window{
                 }
 
                 onClicked: {
-                    connectionWindow.setMessage("Подключение")
-                    connectionWindow.show()
-                    controller.startClient(address.text)
+                    if(controller.isValidIp(address.text)){
+                        controller.startClient(address.text)
+                        connectionWindow.setMessage("Подключение")
+                        connectionWindow.show()
+                    }
+                    else
+                    {
+                        invalidAddressWindow.show()
+                    }
                 }
             }
             TextEdit{
@@ -126,6 +132,13 @@ Window{
         }
     }
 
+    ConnectionWindow{
+        id: invalidAddressWindow
+
+        buttonText: "Ок"
+        message: "Введен некорректный адрес"
+    }
+
     // Контроллер
     Controller{
         id: controller
@@ -142,7 +155,6 @@ Window{
         }
         // Костыль, переделать под массив
         onDataReceived: {
-            console.log("TYPE: " + type)
             gameWindow.dataReceived(type, a, b, c)
         }
         onClientConnected: {

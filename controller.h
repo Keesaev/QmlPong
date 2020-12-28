@@ -23,6 +23,7 @@ public:
     Q_INVOKABLE void startClient(QString address);
     Q_INVOKABLE void startServerStreaming(QString address);
     Q_INVOKABLE void startClientStreaming(QString address);
+    Q_INVOKABLE bool isValidIp(QString address);
 public slots:
     void stopStreaming();
     void cancelConnection();

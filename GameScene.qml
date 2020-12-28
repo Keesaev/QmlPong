@@ -56,7 +56,6 @@ Rectangle {
     }
 
     // Пунктир по середине
-
     Column{
         anchors.centerIn: parent
         spacing: 20
@@ -70,7 +69,6 @@ Rectangle {
     }
 
     // Очки игроков
-
     Row{
         anchors.margins: 100
         anchors.horizontalCenter: parent.horizontalCenter
@@ -91,25 +89,6 @@ Rectangle {
         }
     }
 
-    function checkPoints(){
-        var msg = left.points + " : " + right.points;
-        if(activePlayer.points >= pointsToWin)
-        {
-            msg = "Вы выиграли со счетом\n" + msg;
-            messageWindow.setMessage(msg)
-            messageWindow.show()
-            messageWindow.setVisible(true)
-            timer.stop()
-        }
-        else if(notActivePlayer.points >= pointsToWin){
-            msg = "Вы проиграли со счетом\n" + msg;
-            messageWindow.setMessage(msg)
-            messageWindow.show()
-            messageWindow.setVisible(true)
-            timer.stop()
-        }
-    }
-
     ConnectionWindow{
         id: messageWindow
 
@@ -121,7 +100,6 @@ Rectangle {
     }
 
     // Игроки
-
     Player{
         id: left
         x: 40
@@ -134,6 +112,7 @@ Rectangle {
         y: gameScene.height / 2 - height / 2
     }
 
+    // Играбельная доска слева
     function setHostPlayer(){
         activePlayer = left
         notActivePlayer = right
@@ -141,6 +120,7 @@ Rectangle {
         right.setPlayable(false)
     }
 
+    // Играбельная доска справа
     function setClientPlayer(){
         activePlayer = right
         notActivePlayer = left
@@ -149,7 +129,6 @@ Rectangle {
     }
 
     // Мяч
-
     Ball{
         id: ball
     }
@@ -162,8 +141,7 @@ Rectangle {
         timer.running = false
     }
 
-    // Управление доской
-
+    // Управление доской играбельного игрока
     function movePlayer(a, event){
         if(event.key == a.keyUp) a.goUp()
             else if(event.key == a.keyDown) a.goDown()
@@ -179,67 +157,117 @@ Rectangle {
 
         onTriggered: {
 
-            checkWallCollision()
-            checkPlayersCollision()
+            // При столкновении с игроком меняем вектор скорости мяча
+            if(checkPlayersCollision(ball, left, right))
+                ball.xSpeed *= -1
 
+            // При столкновении с горизонтальными стенами меняем вектор скорости мяча
+            if(checkHorizontalWallCollision(ball))
+                ball.ySpeed *= -1
+
+            // Двигаем мяч исходя из полученных данных
             ball.x = (ball.x + otherBallx) / 2
             ball.y = (ball.y + otherBally) / 2
 
+            // Двигаем мяч исходя из наших данных
             ball.x += ball.xSpeed
             ball.y += ball.ySpeed
 
+            // Исходя из полученных данных перемещаем неиграбельного игрока
             notActivePlayer.y = otherPlayerY
 
+            // Если изменяется счет, отправляем сообщение типа "b"
+            if(checkLeftWallCollision(ball) || checkRightWallCollision(ball)){
+
+                ball.x = ball.parentWidth / 10;
+                ball.y = ball.parentHeight / 10;
+                ball.xSpeed = Math.abs(ball.xSpeed)
+                ball.ySpeed = Math.abs(ball.ySpeed)
+
+                dataGenerated("b;" +
+                              left.points + ";" +
+                              right.points + ";")
+
+                // Проверяем, не достигли ли игроки нужного для победы числа очков
+                var msg = checkPoints(activePlayer, notActivePlayer)
+                if(msg != ""){
+                    messageWindow.setMessage(msg)
+                    messageWindow.show()
+                    messageWindow.setVisible(true)
+                    timer.stop()
+                }
+            }
+
+            // Отправляем сообщение типа "а"
             dataGenerated("a;" + activePlayer.y + ";" +
                           ball.x + ";" +
                           ball.y + ";")
         }
     }
 
-    // Столкновение со стенами
-    function checkWallCollision(){
-        if(ball.x > ball.parentWidth - 20 ||
-                ball.x < 0){
-            if(ball.x > ball.parentWidth - 20){
-                left.points++
-                dataGenerated("b;" + left.points + ";" +
-                              right.points + ";")
-                checkPoints()
-            }
-            else if(ball.x < 0){
-                right.points++
-                dataGenerated("b;" + left.points + ";" +
-                              right.points + ";")
-                checkPoints()
-            }
-            ball.x = ball.parentWidth / 10;
-            ball.y = ball.parentHeight / 10;
-            ball.xSpeed = Math.abs(ball.xSpeed)
-            ball.ySpeed = Math.abs(ball.ySpeed)
+    // Столкновение с левой стеной
+    function checkRightWallCollision(a){
+        if(a.x >= a.parentWidth - 20){
+            left.points++
+            return true
         }
+        else
+            return false
+    }
 
-        if(ball.y > ball.parentHeight - 20 ||
-                ball.y < 0)
-            ball.ySpeed *= -1
+    // Столкновение с правой стеной
+    function checkLeftWallCollision(a){
+        if(a.x <= 0){
+            right.points++
+            return true
+        }
+        else
+            return false
+    }
+
+    // Столкновение с горизонтальными стенами
+    function checkHorizontalWallCollision(a){
+        if(a.y >= a.parentHeight - 20 ||
+                a.y <= 0)
+            return true
+        else
+            return false
     }
 
     // Столковение с игроками
 
-    function checkPlayersCollision(){
-        if(ball.x <= left.x + left.width &&
-                ball.x + ball.width >= left.x &&
-                ball.y <= left.y + left.height &&
-                ball.y + ball.height >= left.y)
+    function checkPlayersCollision(b, l, r){
+        if(b.x <= l.x + l.width &&
+                b.x + b.width >= l.x &&
+                b.y <= l.y + l.height &&
+                b.y + b.height >= l.y)
         {
-            ball.xSpeed *= -1
+            return true
         }
         else
-            if(ball.x + ball.width >= right.x &&
-                    ball.x <= right.x + right.width &&
-                    ball.y <= right.y + right.height &&
-                    ball.y + ball.height >= right.y)
+            if(b.x + b.width >= r.x &&
+                    b.x <= r.x + r.width &&
+                    b.y <= r.y + r.height &&
+                    b.y + b.height >= r.y)
             {
-                ball.xSpeed *= -1
+                return true
             }
+        else
+                return false
+    }
+
+    // Проверяем не окончилась ли игра
+    function checkPoints(a, n){
+        var message = a.points + " : " + n.points;
+        if(a.points >= pointsToWin)
+        {
+            message = "Вы выиграли со счетом\n" + message;
+        }
+        else if(n.points >= pointsToWin){
+            message = "Вы проиграли со счетом\n" + message;
+        }
+        else
+            message = ""
+        return message
     }
 }

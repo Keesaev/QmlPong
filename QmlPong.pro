@@ -1,4 +1,4 @@
-QT += quick network
+QT += quick network testlib
 
 CONFIG += c++11
 
@@ -11,7 +11,8 @@ SOURCES += \
         controller.cpp \
         main.cpp \
         server.cpp \
-        streaming.cpp
+        streaming.cpp \
+        tst_controller.cpp
 
 RESOURCES += qml.qrc \
     font.qrc
@@ -31,6 +32,7 @@ HEADERS += \
     client.h \
     controller.h \
     server.h \
-    streaming.h
+    streaming.h \
+    tst_controller.h
 
 DISTFILES +=

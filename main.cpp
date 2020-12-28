@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QtTest/QTest>
 
+#include "tst_controller.h"
 #include "controller.h"
 
 int main(int argc, char *argv[])
@@ -18,6 +20,8 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     qmlRegisterType<Controller>("Controller", 1, 1, "Controller");
     engine.load(url);
+
+    //QTest::qExec(new tst_controller, argc, argv);
 
     return app.exec();
 }

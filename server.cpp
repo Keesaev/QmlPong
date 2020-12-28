@@ -27,7 +27,6 @@ void Server::startServer(){
 
 // По сути этот слот вызывается когда у сокета уже статус 3 (соединение установлено)
 void Server::onNewConnection(){
-    qDebug() << "Server: new connection\n";
     m_socket = m_server->nextPendingConnection();
     QString addr = m_socket->peerAddress().toString();
     // Преобразуем из формата "::ffff:127.0.0.1" в "127.0.0.1"
