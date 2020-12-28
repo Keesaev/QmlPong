@@ -16,7 +16,7 @@ Rectangle {
 
     FontLoader{
         id: pressStart2p;
-        source: "qrc:/PressStart2P-Regular.ttf"
+        source: "qrc:/font/PressStart2P-Regular.ttf"
     }
 
     signal dataGenerated(string data)
@@ -34,10 +34,20 @@ Rectangle {
             left.points = a
             right.points = b
 
-            checkPoints()
+            // Проверяем не окончена ли игра
+            var msg = checkPoints(activePlayer, notActivePlayer)
+            if(msg != ""){
+                messageWindow.setMessage(msg)
+                messageWindow.show()
+                messageWindow.setVisible(true)
+                timer.stop()
+            }
 
+            // Перемещаем мячик в исходное положение
             ball.x = ball.parentWidth / 10;
             ball.y = ball.parentHeight / 10;
+            otherBallx = ball.x
+            otherBally = ball.y
             ball.xSpeed = Math.abs(ball.xSpeed)
             ball.ySpeed = Math.abs(ball.ySpeed)
         }
@@ -89,7 +99,7 @@ Rectangle {
         }
     }
 
-    ConnectionWindow{
+    MessageWindow{
         id: messageWindow
 
         buttonText: "Выход"
@@ -157,25 +167,6 @@ Rectangle {
 
         onTriggered: {
 
-            // При столкновении с игроком меняем вектор скорости мяча
-            if(checkPlayersCollision(ball, left, right))
-                ball.xSpeed *= -1
-
-            // При столкновении с горизонтальными стенами меняем вектор скорости мяча
-            if(checkHorizontalWallCollision(ball))
-                ball.ySpeed *= -1
-
-            // Двигаем мяч исходя из полученных данных
-            ball.x = (ball.x + otherBallx) / 2
-            ball.y = (ball.y + otherBally) / 2
-
-            // Двигаем мяч исходя из наших данных
-            ball.x += ball.xSpeed
-            ball.y += ball.ySpeed
-
-            // Исходя из полученных данных перемещаем неиграбельного игрока
-            notActivePlayer.y = otherPlayerY
-
             // Если изменяется счет, отправляем сообщение типа "b"
             if(checkLeftWallCollision(ball) || checkRightWallCollision(ball)){
 
@@ -197,11 +188,33 @@ Rectangle {
                     timer.stop()
                 }
             }
+            else
+            {
+                // При столкновении с игроком меняем вектор скорости мяча
+                if(checkPlayersCollision(ball, left, right))
+                    ball.xSpeed *= -1
 
-            // Отправляем сообщение типа "а"
-            dataGenerated("a;" + activePlayer.y + ";" +
-                          ball.x + ";" +
-                          ball.y + ";")
+
+                // При столкновении с горизонтальными стенами меняем вектор скорости мяча
+                if(checkHorizontalWallCollision(ball))
+                    ball.ySpeed *= -1
+
+                // Двигаем мяч исходя из полученных данных
+                ball.x = (ball.x + otherBallx) / 2
+                ball.y = (ball.y + otherBally) / 2
+
+                // Двигаем мяч исходя из наших данных
+                ball.x += ball.xSpeed
+                ball.y += ball.ySpeed
+
+                // Исходя из полученных данных перемещаем неиграбельного игрока
+                notActivePlayer.y = otherPlayerY
+
+                // Отправляем сообщение типа "а"
+                dataGenerated("a;" + activePlayer.y + ";" +
+                              ball.x + ";" +
+                              ball.y + ";")
+            }
         }
     }
 

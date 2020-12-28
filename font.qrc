@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>PressStart2P-Regular.ttf</file>
+        <file>font/PressStart2P-Regular.ttf</file>
     </qresource>
 </RCC>

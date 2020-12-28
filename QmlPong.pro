@@ -6,13 +6,14 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+include(tests/tests.pri)
+
 SOURCES += \
         client.cpp \
         controller.cpp \
         main.cpp \
         server.cpp \
-        streaming.cpp \
-        tst_controller.cpp
+        streaming.cpp
 
 RESOURCES += qml.qrc \
     font.qrc
@@ -32,7 +33,6 @@ HEADERS += \
     client.h \
     controller.h \
     server.h \
-    streaming.h \
-    tst_controller.h
+    streaming.h
 
 DISTFILES +=

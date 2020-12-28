@@ -24,7 +24,7 @@ Window {
 
     FontLoader{
         id: pressStart2p;
-        source: "qrc:/PressStart2P-Regular.ttf"
+        source: "qrc:/font/PressStart2P-Regular.ttf"
     }
 
     ColumnLayout{

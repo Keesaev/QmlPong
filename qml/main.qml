@@ -16,7 +16,7 @@ Window{
 
     FontLoader{
         id: pressStart2p;
-        source: "qrc:/PressStart2P-Regular.ttf"
+        source: "qrc:/font/PressStart2P-Regular.ttf"
     }
 
     ColumnLayout{
@@ -123,7 +123,7 @@ Window{
     }
 
     // Окно подключения к серверу
-    ConnectionWindow{
+    MessageWindow{
         id: connectionWindow
 
         // @disable-check M16
@@ -132,7 +132,7 @@ Window{
         }
     }
 
-    ConnectionWindow{
+    MessageWindow{
         id: invalidAddressWindow
 
         buttonText: "Ок"

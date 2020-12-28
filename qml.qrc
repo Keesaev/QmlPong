@@ -1,11 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>GameScene.qml</file>
-        <file>Ball.qml</file>
-        <file>Player.qml</file>
-        <file>GameWindow.qml</file>
-        <file>ConnectionWindow.qml</file>
-        <file>tst_GameScene.qml</file>
+        <file>qml/Ball.qml</file>
+        <file>qml/GameScene.qml</file>
+        <file>qml/GameWindow.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/MessageWindow.qml</file>
+        <file>qml/Player.qml</file>
+    </qresource>
+    <qresource prefix="/tests">
+        <file>tests/tst_GameScene.qml</file>
     </qresource>
 </RCC>
